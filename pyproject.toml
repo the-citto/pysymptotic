@@ -1,0 +1,123 @@
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysymptotic"
+description = "Asymptotic notation."
+requires-python = ">=3.11"
+authors = [
+    { name = "the-citto" }
+]
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Typing :: Typed",
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Topic :: System :: Software Distribution",
+]
+dynamic = ["version", "dependencies"]
+
+[project.optional-dependencies]
+tests = [
+    "complexipy",
+    "coverage",
+    "matplotlib",
+    "pytest",
+    "pytest-cov",
+    "pytest-mypy",
+    "pytest-ruff",
+    "pytest-pyright",
+]
+dev = [
+    "pysymptotic[tests]",
+    "ipython",
+]
+
+[project.urls]
+# Homepage = "https://github.com/the-citto/pysymptotic"
+# Documentation = "https://github.com/the-citto/pysymptotic"
+Repository = "https://github.com/the-citto/pysymptotic"
+
+[project.scripts]
+pysymptotic = "pysymptotic:cli.cli"
+
+[tool.setuptools_scm]
+
+[tool.setuptools.package-data]
+pysymptotic = ["py.typed"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.lock"] }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --no-header --tb=no --cov --cov-report term-missing"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+omit = ["tests/*"]
+
+[tool.mypy]
+strict = true
+plugins = "numpy.typing.mypy_plugin"
+# exclude = [
+#     "__pycache__",
+#     ".git",
+#     ".venv",
+# ]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+# enableReachabilityAnalysis = false
+# include = [
+#     "src",
+#     "tests",
+# ]
+# exclude = [
+#     "__pycache__",
+#     ".git",
+#     ".venv",
+# ]
+
+[tool.ruff]
+# exclude = [
+#     "__pycache__",
+#     ".git",
+#     ".venv",
+# ]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D203", # `one-blank-line-before-class`
+    "D213", # `multi-line-summary-first-line`
+    "ERA001", # Found commented-out code
+    "S602", # `subprocess` call with `shell=True` identified, security issue
+    # "S603", # `subprocess` call: check for execution of untrusted input # false positives
+] # (D203) mutually exclusive with (D211) - (D212) mutually exclusive with (D213)
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
+    "PLR2004", # Magic value used in comparison
+    "S101",
+] # (S101) Use of `assert`
+
+[tool.ruff.lint.isort]
+known-first-party = ["pysymptotic"]
+lines-after-imports = 2
+

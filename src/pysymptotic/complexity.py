@@ -14,8 +14,10 @@ Common notations:
     O(n!)	    factorial
 """
 
+# type ignore[misc] -> https://github.com/python/mypy/issues/15182
+# ruff: noqa: D400 D415
+
 import abc
-import dataclasses
 import math
 import typing
 
@@ -32,181 +34,111 @@ __all__ = [
     "Quadratic",
 ]
 
+def constant(n: int, a: float) -> float:
+    """O(1)"""
+    return n * 0 + a
 
-@dataclasses.dataclass
-class ComplexityDetails:
-    """Complexity details."""
+
+def logarithmic(n: int, a: float, b: float) -> float:
+    """O(log n)"""
+    return a * math.log2(n) + b
+
+
+
+constant.__name__
+constant.__doc__
+
+
+
+class ComplexityType(abc.ABC):
+    """Complexity type."""
 
     notation: str
-    name: str
-    general_form: str
-
-
-class ComplexityFunction(float, abc.ABC):
-    """Complexity function ABC."""
 
     @abc.abstractmethod
-    def __new__(cls, value: float) -> typing.Self:
+    def __new__(cls, n: int) -> float: # type: ignore[misc]
         """Set new."""
-        return super().__new__(cls, value)
-
-    @property
-    @abc.abstractmethod
-    def description(self) -> ComplexityDetails:
-        """Description."""
+        raise NotImplementedError
 
 
-class Constant(ComplexityFunction):
+class Constant(ComplexityType):
     """Constant."""
 
-    def __new__(cls, n: int, a: float) -> typing.Self:
+    notation: str = "O(1)"
+
+    def __new__(cls, n: int, a: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "n * 0 + a"
-        value = n * 0 + a
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(1)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
+        return n * 0 + a
 
 
-class Logarithmic(ComplexityFunction):
+class Logarithmic(ComplexityType):
     """Logarithmyc."""
 
-    def __new__(cls, n: int, a: float, b: float) -> typing.Self:
+    notation: str = "O(log n)"
+
+    def __new__(cls, n: int, a: float, b: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "a * log n + b"
-        value = a * np.log(n) + b
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(log n)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
+        return typing.cast("float", a * np.log(n) + b)
 
 
-class Linear(ComplexityFunction):
+class Linear(ComplexityType):
     """Linear."""
 
-    def __new__(cls, n: int, a: float, b: float) -> typing.Self:
+    notation: str = "O(n)"
+
+    def __new__(cls, n: int, a: float, b: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "a * n + b"
-        value = a * n + b
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(n)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
+        return a * n + b
 
 
-class Linearithmic(ComplexityFunction):
+class Linearithmic(ComplexityType):
     """Linearithmyc."""
 
-    def __new__(cls, n: int, a: float, b: float) -> typing.Self:
+    notation: str = "O(n log n)"
+
+    def __new__(cls, n: int, a: float, b: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "a * n * log n  + b"
-        value = a * n * np.log(n) + b
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(n log n)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
+        return typing.cast("float", a * n * np.log(n) + b)
 
 
-class Quadratic(ComplexityFunction):
+class Quadratic(ComplexityType):
     """Quadratic."""
 
-    def __new__(cls, n: int, a: float, b: float, c: float) -> typing.Self:
+    notation: str = "O(n^2)"
+
+    def __new__(cls, n: int, a: float, b: float, c: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "a * n^2 + b * n + c"
-        value = a * n**2 + b * n + c
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(n^2)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
+        return a * n**2 + b * n + c
 
 
-class Cubic(ComplexityFunction):
-    """Quadratic."""
+class Cubic(ComplexityType):
+    """Cubic."""
 
-    def __new__(cls, n: int, a: float, b: float, c: float, d: float) -> typing.Self:
+    notation: str = "O(n^3)"
+
+    def __new__(cls, n: int, a: float, b: float, c: float, d: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "a * n^3 + b * n^2 + c * n + d"
-        value = a * n**3 + b * n**2 + c * n + d
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(n^3)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
+        return a * n**3 + b * n**2 + c * n + d
 
 
-class Exponential(ComplexityFunction):
+class Exponential(ComplexityType):
     """Exponential."""
 
-    def __new__(cls, n: int, a: float, b: float) -> typing.Self:
+    notation: str = "O(2^n)"
+
+    def __new__(cls, n: int, a: float, b: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "a * e^x + b"
-        value = a * np.exp(n) + b
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(e^n)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
+        return typing.cast("float", a * 2**n + b)
 
 
-class Factorial(ComplexityFunction):
+class Factorial(ComplexityType):
     """Factorial."""
 
-    def __new__(cls, n: int, a: float) -> typing.Self:
+    notation: str = "O(n!)"
+
+    def __new__(cls, n: int, a: float) -> float: # type: ignore[misc]
         """Set new."""
-        cls.general_form = "a * e^x + b"
-        value = math.factorial(n) + a
-        return super().__new__(cls, value)
-
-    @property
-    def description(self) -> ComplexityDetails:
-        """Description."""
-        return ComplexityDetails(
-            notation="O(e^n)",
-            name=self.__class__.__name__,
-            general_form=self.general_form,
-        )
-
+        return math.factorial(n) + a
 
 
 

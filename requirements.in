@@ -1,3 +1,5 @@
 numpy
 rich-click
 scipy
+scipy-stubs
+

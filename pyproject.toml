@@ -42,8 +42,6 @@ dev = [
 ]
 
 [project.urls]
-# Homepage = "https://github.com/the-citto/pysymptotic"
-# Documentation = "https://github.com/the-citto/pysymptotic"
 Repository = "https://github.com/the-citto/pysymptotic"
 
 [project.scripts]
@@ -68,35 +66,16 @@ testpaths = ["tests"]
 omit = ["tests/*"]
 
 [tool.mypy]
+python_executable = ".venv/bin/python"
 strict = true
 plugins = "numpy.typing.mypy_plugin"
-# exclude = [
-#     "__pycache__",
-#     ".git",
-#     ".venv",
-# ]
 
 [tool.pyright]
 typeCheckingMode = "strict"
 venvPath = "."
 venv = ".venv"
-# enableReachabilityAnalysis = false
-# include = [
-#     "src",
-#     "tests",
-# ]
-# exclude = [
-#     "__pycache__",
-#     ".git",
-#     ".venv",
-# ]
 
 [tool.ruff]
-# exclude = [
-#     "__pycache__",
-#     ".git",
-#     ".venv",
-# ]
 line-length = 120
 indent-width = 4
 
@@ -106,8 +85,6 @@ ignore = [
     "D203", # `one-blank-line-before-class`
     "D213", # `multi-line-summary-first-line`
     "ERA001", # Found commented-out code
-    "S602", # `subprocess` call with `shell=True` identified, security issue
-    # "S603", # `subprocess` call: check for execution of untrusted input # false positives
 ] # (D203) mutually exclusive with (D211) - (D212) mutually exclusive with (D213)
 
 [tool.ruff.lint.per-file-ignores]

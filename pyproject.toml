@@ -68,7 +68,7 @@ omit = ["tests/*"]
 [tool.mypy]
 python_executable = ".venv/bin/python"
 strict = true
-plugins = "numpy.typing.mypy_plugin"
+# plugins = "numpy.typing.mypy_plugin"
 
 [tool.pyright]
 typeCheckingMode = "strict"

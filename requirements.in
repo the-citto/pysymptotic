@@ -1,4 +1,5 @@
 numpy
+optype[numpy]
 rich-click
 scipy
 scipy-stubs
